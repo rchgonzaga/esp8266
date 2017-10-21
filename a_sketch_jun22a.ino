@@ -2,13 +2,12 @@ extern "C" {
     bool system_update_cpu_freq(int);
 }
 
-// include the SD library:
-#include <ESP.h>              // SPI
+#include <ESP.h>              // ESP
 #include <SPI.h>              // SPI
 #include <SD.h>               // SD
 #include <ESP8266WiFi.h>      // ESPWifi
-//#include <PubSubClient.h>     // Importa a Biblioteca PubSubClient
-#include <Metro.h>            // Include Metro library - para tempo
+
+#include <Metro.h>            // Include Metro library - time
 #include <TinyGPS++.h>        // Tiny GPS Plus Library
 #include <SoftwareSerial.h>   // Software Serial Library so we can use other Pins for communication with the GPS module
 
@@ -32,9 +31,7 @@ String selectX = "";
 int countSelectX = 0;
 int isExecuting = 0;
 
-//##################################################################################################
-// -----------------( TIMERS )
-//##################################################################################################
+// TIMERS
 Ticker tickArrow;           // 0.05 SEG.
 Ticker tickFooter;          // 1.00 SEG.
 Ticker tickSDGPSWriter;     // 2.00 SEG.
@@ -42,37 +39,27 @@ Ticker tickGpsReadSerial;   // 0.50 SEG.
 Ticker tickIR;              // 0.50 SEG.
 Ticker tickMenu;            // 0.40 SEG.
   
-//##################################################################################################
-// -----------------( CONTROLES DO SDCARD )
-//##################################################################################################
+// SDCARD CONTROL
 Sd2Card     card;
 SdVolume  volume;
 SdFile      root;
 
-//##################################################################################################
-// -----------------( PINO DE CONTROLE DO SDCARD )
-//##################################################################################################
+// SDCARD PIN
 const int chipSelect = D4;
 #define SD_SELECT D4
 
-//##################################################################################################
-// -----------------( TESTE DE PONTO DE REFERENCIA - DEVE VIR DA CONFIGURÇÃO INICIAL )
-//##################################################################################################
+// DEFINES THE INITIA POSITION 
 const double Home_LAT = -7.5330;  // Your Home Latitude
 const double Home_LNG = -46.0359; // Your Home Longitude
 
-//##################################################################################################
-// -----------------( INSTANCIA DO OBJTO GPS )
-//##################################################################################################
+// GPS LIB REFERENCE
 TinyGPSPlus gps;
 
-//##################################################################################################
-// -----------------( CONFIGURAÇÃO PARA SE CONECTAR NO WIFI - DEVE VIR DO CONFIGURAÇÃO INICIAL )
-//##################################################################################################
-const char* host = "192.168.254.114"; //SERVIDOR PADRAO
-const byte credentialCount = 2; // MUDA CONFORME A QUANTIDADE DE REDES VOCE PODE TENTAR SE CONECTAR
+// WIFI CONFIGURATION
+const char* host = "192.168.254.114"; // MAIN SERVER
+const byte credentialCount = 2;       // NUMBER OF CREDENTIAL/WIFI NETWORKS THAT YOUR ESP8266 WILL TRY TO CONNECT
 const char* credentials[] = {
-  "rsgonzaga", "aq1sw2de3",
+  "rsgonzaga", "1248163264",
   "Sala-1907", "1248163264"
 };
 
@@ -80,24 +67,19 @@ const byte bufMax = 20;
 char ssid[bufMax];
 char password[bufMax];
 
-int contaPingo = 0;
-int contaPingoTotal = 0;
+int countPing = 0;
+int countPingTotal = 0;
 
 boolean go = true;
 
-//##################################################################################################
-// -----------------( CONFIGURAÇÃO DE PINOS DA TELA )
-//##################################################################################################
+// TFT CONFIGURATION
 #define TFT_CS     D0
 #define TFT_RST    -1  // you can also connect this to the Arduino reset
 #define TFT_DC     D1
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
 
-
-//##################################################################################################
-// -----------------( CONFIGURAÇÃO DE PINOS DA TELA )
-//##################################################################################################
+//SCREEN CONFIGURATION
 
 char strFooter[5];
 String strSpinner = "|";
@@ -113,64 +95,11 @@ enum COLORS {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //##################################################################################################
-// -----------------( ScanWiFi)
+// METHODS
 //##################################################################################################
+
+
 void ScanWiFi() {
     bool found = false;
 
@@ -231,14 +160,14 @@ void wifiConfig(){
         delay(200);
         
         Serial.print(".");
-        contaPingo++;
+        countPing++;
 
-        if(contaPingo > 21){
-            contaPingo = 0;
-            contaPingoTotal++;
+        if(countPing > 21){
+            countPing = 0;
+            countPingTotal++;
         }
 
-        if(contaPingoTotal > 2){
+        if(countPingTotal > 2){
           break;
         }
     }
