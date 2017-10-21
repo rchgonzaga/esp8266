@@ -178,10 +178,7 @@ void wifiConfig(){
     Serial.println(WiFi.localIP());
 }
 
-//##################################################################################################
-// -----------------( DELAY FOR GPS )
-//##################################################################################################
-
+// DELAY USED FOR THE GPS
 static void smartDelay(unsigned long ms) {
     unsigned long start = millis();
     do {
