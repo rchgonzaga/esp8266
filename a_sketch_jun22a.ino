@@ -187,9 +187,8 @@ static void smartDelay(unsigned long ms) {
     } while (millis() - start < ms);
 }
 
-//##################################################################################################
-// -----------------( LEITURA DE ARQUIVO DE CONFIGURAÇÃO )
-//##################################################################################################
+// READ THE CONFIG FILE
+// TODO: IN THE FUTURE IT WILL RECEIVE INTRUCTIONS FROM A SERVER AND STOR INTO A FILE
 void readConfigFile() {
 
   const char *filename = "/CFG.TXT";
@@ -226,6 +225,7 @@ void readConfigFile() {
     Serial.print("Could not read 'mac' from section 'network', error was ");
   }
 }
+
 
 // MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU
 // MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU --  MENU
